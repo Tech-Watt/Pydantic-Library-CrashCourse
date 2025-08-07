@@ -32,15 +32,16 @@ import json
 class User(BaseModel):
     id: int
     name: str
-    email: str 
+    age: int
 
 # # # Example of creating a User instance with valid data
-# valid_user = User(id=1, name="John Doe", email="john.doe@example.com")
+# valid_user = User(id=1, name="John Doe", age=30)
 # print(valid_user)
 
 
 # # Example of creating a User instance with invalid data
-# # invalid_user = User(id="invalid", name="Jane Doe", email="jane.doe@example.com")
+# # invalid_user = User(id="invalid", name="Jane Doe", age="invalid")  # This will raise a validation error
+# # print(invalid_user)  # Uncommenting this line will raise a validation error because
 # # print(invalid_user)  # This will raise a validation error because id is not an int
 
 
@@ -53,25 +54,25 @@ that can be stored (e.g. JSON, XML, or binary) and later reconstructed.
 '''
 
 
-user = User(id=2, name="Jane Doe", email="jane.doe@example.com")
-print(user)
+user_one = User(id=2, name="Jane Doe", age=25)
+print(user_one)
 
 # Convert User model to JSON
-user_json = user.model_dump_json()
-print(f'user_json: {user_json}')
+data_s = user_one.model_dump_json()
+print(f'from pydantic to json: {data_s}')
 
 
 # Deserialization – The process of converting serialized data back into a usable format,
 # such as reconstructing an object from its serialized form.
 
 # Convert JSON back to User model
-user_model_from_json = User.model_validate_json(user_json)
-print(f'user_model_from_json: {user_model_from_json}')
+data_d = User.model_validate_json(data_s)
+print(f'from json to pydantic format: {data_d}')
 
 # Example of unpacking a dictionary into a Pydantic model
 # This is useful when you have data in dictionary format and want to create a Pydantic model instance from it.
 
-json_data = '{"id": 3, "name": "Alice Smith", "email": "alice.smith@example.com"}'
+json_data = '{"id": 3, "name": "Alice Smith", "age": 28}'
 parse_json = json.loads(json_data)
 print(f'data: {parse_json}')
 
@@ -87,9 +88,9 @@ print(f'user_3: {json_to_model}')
 from pydantic_settings import BaseSettings
 
 class Settings(BaseSettings):
-    password: str
-    email: str
-    api_key: str
+    key: str
+    name : str
+    id : str
 
     class Config:
         env_file = ".env"
@@ -97,7 +98,7 @@ class Settings(BaseSettings):
         case_sensitive = True
         
 
-settings = Settings()
-print(settings.password)
-print(settings.email)
-print(settings.api_key)
+keys = Settings()
+print(keys.key)
+print(keys.name)
+print(keys.id)
